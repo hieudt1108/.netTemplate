@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\C#\\udemyTutorial\\udemyTutorial\\udemyTutorial.csproj": {}
+    "D:\\C#\\UdemyTutorial\\udemyTutorial\\udemyTutorial.csproj": {}
   },
   "projects": {
-    "D:\\C#\\udemyTutorial\\udemyTutorial\\udemyTutorial.csproj": {
+    "D:\\C#\\UdemyTutorial\\udemyTutorial\\udemyTutorial.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\C#\\udemyTutorial\\udemyTutorial\\udemyTutorial.csproj",
+        "projectUniqueName": "D:\\C#\\UdemyTutorial\\udemyTutorial\\udemyTutorial.csproj",
         "projectName": "udemyTutorial",
-        "projectPath": "D:\\C#\\udemyTutorial\\udemyTutorial\\udemyTutorial.csproj",
+        "projectPath": "D:\\C#\\UdemyTutorial\\udemyTutorial\\udemyTutorial.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\C#\\udemyTutorial\\udemyTutorial\\obj\\",
+        "outputPath": "D:\\C#\\UdemyTutorial\\udemyTutorial\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -43,6 +43,16 @@
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[11.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

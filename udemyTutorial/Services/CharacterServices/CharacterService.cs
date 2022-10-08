@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using udemyTutorial.Data;
 using udemyTutorial.DTOs.Character;
 
 namespace udemyTutorial.Services.CharacterServices
@@ -6,10 +8,12 @@ namespace udemyTutorial.Services.CharacterServices
     public class CharacterService : ICharacterService
     {
         private readonly IMapper _mapper;
+        private readonly DataContext _dataContext;
 
-        public CharacterService(IMapper mapper)
+        public CharacterService(IMapper mapper, DataContext dataContext)
         {
             _mapper = mapper;
+            _dataContext = dataContext;
         }
 
         private static List<Character> characters = new List<Character>
@@ -23,17 +27,17 @@ namespace udemyTutorial.Services.CharacterServices
 
         public async Task<ServiceResponse<List<GetCharacterDTO>>> getAllCharacters()
         {
-            return new ServiceResponse<List<GetCharacterDTO>>
-            {
-                Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList()
-            };
+            var response = new ServiceResponse<List<GetCharacterDTO>>();
+            var dbCharacters = await _dataContext.Characters.ToListAsync();
+            response.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+            return response;
         }
 
         public async Task<ServiceResponse<GetCharacterDTO>> getCharacterById(string id)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDTO>();
-            var character = characters.FirstOrDefault(c => c.Id == id);
-            serviceResponse.Data = _mapper.Map<GetCharacterDTO>(character);
+            var dbCharacter = await _dataContext.Characters.FirstOrDefaultAsync(c => c.Id == id);
+            serviceResponse.Data = _mapper.Map<GetCharacterDTO>(dbCharacter);
             return serviceResponse;
         }
 
@@ -42,23 +46,29 @@ namespace udemyTutorial.Services.CharacterServices
             Guid g = Guid.NewGuid();
             Character character = _mapper.Map<Character>(addCharacterDTO);
             character.Id = g.ToString();
-            characters.Add(character);
+            _dataContext.Characters.Add(character);
+            await _dataContext.SaveChangesAsync();
             var serviceResponse = new ServiceResponse<AddCharacterDTO>();
             serviceResponse.Data = addCharacterDTO;
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<GetCharacterDTO>> updateCharacter(UpdateCharacterDTO updateCharacterDto, string id)
+        public async Task<ServiceResponse<GetCharacterDTO>> updateCharacter(UpdateCharacterDTO updateCharacterDto,
+        string id)
         {
             ServiceResponse<GetCharacterDTO> response = new ServiceResponse<GetCharacterDTO>();
             Character character = characters.FirstOrDefault(c => c.Id == id);
-            character.Name = updateCharacterDto.Name;
-            character.HitPoints = updateCharacterDto.HitPoints;
-            character.Strength = updateCharacterDto.Strength;
-            character.Defense = updateCharacterDto.Defense;
-            character.Intelligence = updateCharacterDto.Intelligence;
-            character.Class = updateCharacterDto.Class;
+            _mapper.Map(updateCharacterDto, character);
 
+            response.Data = _mapper.Map<GetCharacterDTO>(character);
+            return response;
+        }
+
+        public async Task<ServiceResponse<GetCharacterDTO>> deleteCharacter(string id)
+        {
+            ServiceResponse<GetCharacterDTO> response = new ServiceResponse<GetCharacterDTO>();
+            Character character = characters.FirstOrDefault(c => c.Id == id);
+            characters.Remove(character);
             response.Data = _mapper.Map<GetCharacterDTO>(character);
             return response;
         }

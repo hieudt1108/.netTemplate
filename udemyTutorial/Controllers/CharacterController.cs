@@ -40,5 +40,11 @@ namespace udemyTutorial.Controllers
         {
             return Ok(await _characterService.updateCharacter(updateCharacterDto, id));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> deleteCharacter(string id)
+        {
+            return Ok(await _characterService.deleteCharacter(id));
+        }
     }
 }
